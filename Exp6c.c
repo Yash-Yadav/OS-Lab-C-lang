@@ -1,41 +1,45 @@
 //Worst Fit
 #include <stdio.h>
 #include <conio.h>
-#define max 25
 int main()
 {
-    int frag[max], b[max], f[max], i, j, nb, nf, temp;
-    static int bf[max], ff[max];
-    printf("\n\tMemory Management Scheme - First Fit");
-    printf("\nEnter the number of blocks:");
-    scanf("%d", &nb);
-    printf("Enter the number of files:");
-    scanf("%d", &nf);
-    printf("\nEnter the size of the blocks:-\n");
-    for (i = 1; i <= nb; i++) {
-        printf("Block %d:", i);
-        scanf("%d", &b[i]);
+    int fragments[10], blocks[10], files[10];
+    int m, n, number_of_blocks, number_of_files, temp, top = 0;
+    static int block_arr[10], file_arr[10];
+    printf("\nEnter the Total Number of Blocks:\t");
+    scanf("%d", &number_of_blocks);
+    printf("Enter the Total Number of Files:\t");
+    scanf("%d", &number_of_files);
+    printf("\nEnter the Size of the Blocks:\n");
+    for (m = 0; m < number_of_blocks; m++) {
+        printf("Block No.[%d]:\t", m + 1);
+        scanf("%d", &blocks[m]);
     }
-    printf("Enter the size of the files :-\n");
-    for (i = 1; i <= nf; i++) {
-        printf("File %d:", i);
-        scanf("%d", &f[i]);
+    printf("Enter the Size of the Files:\n");
+    for (m = 0; m < number_of_files; m++) {
+        printf("File No.[%d]:\t", m + 1);
+        scanf("%d", &files[m]);
     }
-    for (i = 1; i <= nf; i++) {
-        for (j = 1; j <= nb; j++) {
-            if (bf[j] != 1) {
-                temp = b[j] - f[i];
+    for (m = 0; m < number_of_files; m++) {
+        for (n = 0; n < number_of_blocks; n++) {
+            if (block_arr[n] != 1) {
+                temp = blocks[n] - files[m];
                 if (temp >= 0) {
-                    ff[i] = j;
-                    break;
+                    if (top < temp) {
+                        file_arr[m] = n;
+                        top = temp;
+                    }
                 }
             }
+            fragments[m] = top;
+            block_arr[file_arr[m]] = 1;
+            top = 0;
         }
-        frag[i] = temp;
-        bf[ff[i]] = 1;
     }
-    printf("\nFile_no:\tFile_size :\tBlock_no:\tBlock_size:\tFragement");
-    for (i = 1; i <= nf; i++)
-        printf("\n%d\t\t%d\t\t%d\t\t%d\t\t%d", i, f[i], ff[i], b[ff[i]], frag[i]);
+    printf("\nFile Number\tFile Size\tBlock Number\tBlock Size\tFragment");
+    for (m = 0; m < number_of_files; m++) {
+        printf("\n%d\t\t%d\t\t%d\t\t%d\t\t%d", m, files[m], file_arr[m], blocks[file_arr[m]], fragments[m]);
+    }
+    printf("\n");
     getch();
 }
