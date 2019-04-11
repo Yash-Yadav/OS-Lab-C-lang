@@ -1,42 +1,56 @@
 //BEST FIT
 #include <stdio.h>
 #include <conio.h>
-#define max 25
+
 int main()
 {
-    int frag[max], b[max], f[max], i, j, nb, nf, temp, lowest = 10000;
-    static int bf[max], ff[max];
-    printf("\nEnter the number of blocks:");
-    scanf("%d", &nb);
-    printf("Enter the number of files:");
-    scanf("%d", &nf);
-    printf("\nEnter the size of the blocks:-\n");
-    for (i = 1; i <= nb; i++) {
-        printf("Block %d:", i);
-        scanf("%d", &b[i]);
+	int fragment[20],b[20],p[20],i,j,nb,np,temp,lowest=9999;
+	static int barray[20],parray[20];
+	
+	printf("\n\t\t\tMemory Management Scheme - Best Fit");
+	printf("\nEnter the number of blocks:");
+	scanf("%d",&nb);
+	printf("Enter the number of processes:");
+	scanf("%d",&np);
+	
+	printf("\nEnter the size of the blocks:-\n");
+	for(i=1;i<=nb;i++)
+    {
+		printf("Block no.%d:",i);
+        scanf("%d",&b[i]);
     }
-    printf("Enter the size of the files :-\n");
-    for (i = 1; i <= nf; i++) {
-        printf("File %d:", i);
-        scanf("%d", &f[i]);
+	
+	printf("\nEnter the size of the processes :-\n");
+	for(i=1;i<=np;i++)
+    {
+        printf("Process no.%d:",i);
+        scanf("%d",&p[i]);
     }
-    for (i = 1; i <= nf; i++) {
-        for (j = 1; j <= nb; j++) {
-            if (bf[j] != 1) {
-                temp = b[j] - f[i];
-                if (temp >= 0)
-                    if (lowest > temp) {
-                        ff[i] = j;
-                        lowest = temp;
-                    }
-            }
-        }
-        frag[i] = lowest;
-        bf[ff[i]] = 1;
-        lowest = 10000;
-    }
-    printf("\nFile No\tFile Size \tBlock No\tBlock Size\tFragment");
-    for (i = 1; i <= nf && ff[i] != 0; i++)
-        printf("\n%d\t\t%d\t\t%d\t\t%d\t\t%d", i, f[i], ff[i], b[ff[i]], frag[i]);
-    getch();
+	
+	for(i=1;i<=np;i++)
+	{
+		for(j=1;j<=nb;j++)
+		{
+			if(barray[j]!=1)
+			{
+				temp=b[j]-p[i];
+				if(temp>=0)
+					if(lowest>temp)
+					{
+						parray[i]=j;
+						lowest=temp;
+					}
+			}
+		}
+		
+		fragment[i]=lowest;
+		barray[parray[i]]=1;
+		lowest=10000;
+	}
+	
+	printf("\nProcess_no\tProcess_size\tBlock_no\tBlock_size\tFragment");
+	for(i=1;i<=np && parray[i]!=0;i++)
+		printf("\n%d\t\t%d\t\t%d\t\t%d\t\t%d",i,p[i],parray[i],b[parray[i]],fragment[i]);
+
+  getch();
 }
