@@ -1,49 +1,33 @@
 #include <stdio.h>
 #include <conio.h>
+void findWaitingTime(int processes[], int n, int bt[], int wt[])
+{
+    wt[0] = 0;
+    for (int i = 1; i < n; i++)
+        wt[i] = bt[i - 1] + wt[i - 1];
+}
+void findTurnaroundTime(int processes[], int n, int bt[], int wt[], int tat[])
+{
+    for (int i = 0; i < n; i++)
+        tat[i] = bt[i] + wt[i];
+}
+void findingTime(int processes[], int n, int bt[])
+{
+    int wt[n], tat[n], total_wt = 0, total_tat = 0;
+    findWaitingTime(processes, n, bt, wt);
+    findTurnaroundTime(processes, n, bt, wt, tat);
+    printf("Processes \tBurst Time \tWaiting \tTurn Around Time\n");
+    for (int i = 0; i < n; i++) {
+        total_wt += wt[i];
+        total_tat += tat[i];
+        printf("  %d   \t\t%d   \t\t%d   \t\t\t%d\n", i + 1, bt[i], wt[i], tat[i]);
+    }
+    printf("Average Waiting Time: %f", (float)total_wt / (float)n);
+    printf("Average Turn Around Time: %f", (float)total_tat / (float)n);
+}
 int main()
 {
-    int bt[20], p[20], wt[20], tat[20], i, j, n, total = 0, pos, temp;
-    float avg_wt, avg_tat;
-    printf("Enter number of process:");
-    scanf("%d", &n);
-    printf("\nEnter Burst Time:\n");
-    for (i = 0; i < n; i++) {
-        printf("p%d:", i + 1);
-        scanf("%d", &bt[i]);
-        p[i] = i + 1; //contains process number
-    }
-    //sorting burst time in ascending order using selection sort
-    for (i = 0; i < n; i++) {
-        pos = i;
-        for (j = i + 1; j < n; j++) {
-            if (bt[j] < bt[pos])
-                pos = j;
-        }
-        temp = bt[i];
-        bt[i] = bt[pos];
-        bt[pos] = temp;
-        temp = p[i];
-        p[i] = p[pos];
-        p[pos] = temp;
-    }
-    wt[0] = 0; //waiting time for first process will be zero
-    //calculate waiting time
-    for (i = 1; i < n; i++) {
-        wt[i] = 0;
-        for (j = 0; j < i; j++)
-            wt[i] += bt[j];
-        total += wt[i];
-    }
-    avg_wt = (float)total / n; //average waiting time
-    total = 0;
-    printf("\nProcess\t    Burst Time    \tWaiting Time\tTurnaround Time");
-    for (i = 0; i < n; i++) {
-        tat[i] = bt[i] + wt[i]; //calculate turnaround time
-        total += tat[i];
-        printf("\np%d\t\t  %d\t\t    %d\t\t\t%d", p[i], bt[i], wt[i], tat[i]);
-    }
-    avg_tat = (float)total / n; //average turnaround time
-    printf("\n\nAverage Waiting Time=%f", avg_wt);
-    printf("\nAverage Turnaround Time=%f\n", avg_tat);
+    int processes[3] = { 1, 2, 3 }, n = 3, burst_time[3] = { 10, 5, 8 };
+    findingTime(processes, n, burst_time);
     getch();
 }
